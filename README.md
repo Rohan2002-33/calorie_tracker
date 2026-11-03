@@ -1,17 +1,36 @@
-# calorie_tracker
+# Calorie Tracker
 
-A new Flutter project.
+A Flutter app to log meals, track daily calorie intake and see how many calories are left for the day.
 
-## Getting Started
+Built for the Module 19 assignment (Complete app development with Claude).
 
-This project is a starting point for a Flutter application.
+## Features
+- Home screen with app name, today's date and a daily progress card
+- Calorie summary cards: Total Calories, Daily Goal (2,000 kcal) and Remaining Calories
+- Add Food screen with validation (name required, calories must be a positive number)
+- Food list built with `ListView.builder`, with a delete button and undo
+- Totals update automatically when items are added or deleted
+- Data is kept in a local in-memory `List`. It resets when the app restarts.
+- No database, no API, no Firebase
 
-A few resources to get you started if this is your first Flutter project:
+## Project structure
+```
+lib/
+  main.dart
+  models/    food_item.dart
+  screens/   splash_screen.dart, home_screen.dart, add_food_screen.dart
+  widgets/   calorie_progress_card.dart, summary_card.dart, food_tile.dart, empty_state.dart
+  theme/     app_theme.dart
+  utils/     constants.dart, date_formatter.dart
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Run
+```bash
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Test
+```bash
+flutter test
+```
