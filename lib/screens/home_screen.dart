@@ -41,20 +41,29 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _foods.insert(0, newItem));
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('${newItem.name} added')));
+      ..showSnackBar(
+        SnackBar(
+          content: Text('${newItem.name} added'),
+          duration: const Duration(milliseconds: 2000),
+        ),
+      );
   }
 
   void _deleteFood(int index) {
     final FoodItem removed = _foods[index];
     setState(() => _foods.removeAt(index));
-    ScaffoldMessenger.of(context)
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           content: Text('${removed.name} removed'),
+          duration: const Duration(milliseconds: 2500),
           action: SnackBarAction(
             label: 'UNDO',
+            textColor: const Color(0xFFFFC857),
             onPressed: () {
+              messenger.hideCurrentSnackBar();
               setState(() {
                 _foods.insert(math.min(index, _foods.length), removed);
               });
