@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../models/food_item.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
@@ -78,10 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'TODAY',
           style: TextStyle(
-            color: AppTheme.textMuted,
+            color: AppTheme.textMuted(context),
             fontSize: 12,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.2,
@@ -90,8 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 2),
         Text(
           DateFormatter.fullDate(DateTime.now()),
-          style: const TextStyle(
-            color: AppTheme.textDark,
+          style: TextStyle(
+            color: AppTheme.textDark(context),
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -136,10 +137,10 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 24),
         Row(
           children: [
-            const Text(
+            Text(
               'Food List',
               style: TextStyle(
-                color: AppTheme.textDark,
+                color: AppTheme.textDark(context),
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
@@ -147,7 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(),
             Text(
               count == 1 ? '1 item' : '$count items',
-              style: const TextStyle(color: AppTheme.textMuted, fontSize: 13),
+              style: TextStyle(
+                color: AppTheme.textMuted(context),
+                fontSize: 13,
+              ),
             ),
           ],
         ),
@@ -158,8 +162,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: const Text(kAppName)),
+      appBar: AppBar(
+        title: const Text(kAppName),
+        actions: [
+          IconButton(
+            tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+            icon: Icon(
+              isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+            ),
+            onPressed: () {
+              themeModeNotifier.value = isDark
+                  ? ThemeMode.light
+                  : ThemeMode.dark;
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _openAddFood,
         icon: const Icon(Icons.add_rounded),

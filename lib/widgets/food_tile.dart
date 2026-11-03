@@ -11,7 +11,8 @@ class FoodTile extends StatelessWidget {
   final FoodItem item;
   final VoidCallback onDelete;
 
-  Widget _buildImageAvatar() {
+  Widget _buildImageAvatar(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final String initial = item.name.isNotEmpty
         ? item.name.substring(0, 1).toUpperCase()
         : '?';
@@ -21,14 +22,14 @@ class FoodTile extends StatelessWidget {
         width: 46,
         height: 46,
         decoration: BoxDecoration(
-          color: AppTheme.primary.withValues(alpha: 0.12),
+          color: AppTheme.primary.withValues(alpha: isDark ? 0.24 : 0.12),
           borderRadius: BorderRadius.circular(12),
         ),
         alignment: Alignment.center,
         child: Text(
           initial,
-          style: const TextStyle(
-            color: AppTheme.primary,
+          style: TextStyle(
+            color: isDark ? const Color(0xFF62D298) : AppTheme.primary,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
@@ -58,16 +59,18 @@ class FoodTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       elevation: 0,
-      color: Colors.white,
-      shape: AppTheme.cardShape,
+      color: AppTheme.cardBg(context),
+      shape: AppTheme.cardShape(context),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
         child: Row(
           children: [
-            _buildImageAvatar(),
+            _buildImageAvatar(context),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -77,8 +80,8 @@ class FoodTile extends StatelessWidget {
                     item.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppTheme.textDark,
+                    style: TextStyle(
+                      color: AppTheme.textDark(context),
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -86,8 +89,8 @@ class FoodTile extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     'Added at ${DateFormatter.time(item.addedAt)}',
-                    style: const TextStyle(
-                      color: AppTheme.textMuted,
+                    style: TextStyle(
+                      color: AppTheme.textMuted(context),
                       fontSize: 12,
                     ),
                   ),
@@ -97,8 +100,8 @@ class FoodTile extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               '${item.calories} kcal',
-              style: const TextStyle(
-                color: AppTheme.primaryDark,
+              style: TextStyle(
+                color: isDark ? const Color(0xFF62D298) : AppTheme.primaryDark,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),

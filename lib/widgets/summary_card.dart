@@ -19,11 +19,13 @@ class SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       margin: EdgeInsets.zero,
       elevation: 0,
-      color: Colors.white,
-      shape: AppTheme.cardShape,
+      color: AppTheme.cardBg(context),
+      shape: AppTheme.cardShape(context),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -32,7 +34,7 @@ class SummaryCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.12),
+                color: color.withValues(alpha: isDark ? 0.22 : 0.12),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, size: 18, color: color),
@@ -44,8 +46,8 @@ class SummaryCard extends StatelessWidget {
                 label,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: AppTheme.textMuted,
+                style: TextStyle(
+                  color: AppTheme.textMuted(context),
                   fontSize: 12,
                   height: 1.3,
                 ),
@@ -56,16 +58,19 @@ class SummaryCard extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 '$value',
-                style: const TextStyle(
-                  color: AppTheme.textDark,
+                style: TextStyle(
+                  color: AppTheme.textDark(context),
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
-            const Text(
+            Text(
               'kcal',
-              style: TextStyle(color: AppTheme.textMuted, fontSize: 11),
+              style: TextStyle(
+                color: AppTheme.textMuted(context),
+                fontSize: 11,
+              ),
             ),
           ],
         ),

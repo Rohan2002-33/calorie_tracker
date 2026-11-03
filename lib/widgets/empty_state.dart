@@ -8,6 +8,8 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
       child: Column(
@@ -15,7 +17,7 @@ class EmptyState extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppTheme.primary.withValues(alpha: 0.10),
+              color: AppTheme.primary.withValues(alpha: isDark ? 0.20 : 0.10),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -25,19 +27,19 @@ class EmptyState extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'No food added yet',
             style: TextStyle(
-              color: AppTheme.textDark,
+              color: AppTheme.textDark(context),
               fontSize: 17,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Tap "Add Food" to log your first meal of the day.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppTheme.textMuted, fontSize: 14),
+            style: TextStyle(color: AppTheme.textMuted(context), fontSize: 14),
           ),
         ],
       ),

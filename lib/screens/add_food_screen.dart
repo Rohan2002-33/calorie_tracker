@@ -105,7 +105,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   Widget _buildFoodPrefix() {
     final String name = _nameController.text.trim();
     if (name.isEmpty) {
-      return const Icon(Icons.restaurant_rounded, color: AppTheme.textMuted);
+      return Icon(Icons.restaurant_rounded, color: AppTheme.textMuted(context));
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -132,6 +132,10 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     IconData? fallbackIcon,
     String? suffix,
   }) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color borderC = AppTheme.borderColor(context);
+    final Color fillC = isDark ? AppTheme.darkInputFill : Colors.white;
+
     OutlineInputBorder border(Color color, [double width = 1]) {
       return OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -141,18 +145,22 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
 
     return InputDecoration(
       labelText: label,
+      labelStyle: TextStyle(color: AppTheme.textMuted(context)),
       hintText: hint,
+      hintStyle: TextStyle(
+        color: AppTheme.textMuted(context).withValues(alpha: 0.6),
+      ),
       prefixIcon:
           prefixIcon ??
           (fallbackIcon != null
-              ? Icon(fallbackIcon, color: AppTheme.textMuted)
+              ? Icon(fallbackIcon, color: AppTheme.textMuted(context))
               : null),
       suffixText: suffix,
       counterText: '',
       filled: true,
-      fillColor: Colors.white,
+      fillColor: fillC,
       contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-      enabledBorder: border(AppTheme.border),
+      enabledBorder: border(borderC),
       focusedBorder: border(AppTheme.primary, 1.6),
       errorBorder: border(AppTheme.danger),
       focusedErrorBorder: border(AppTheme.danger, 1.6),
@@ -161,6 +169,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Add Food')),
       body: SafeArea(
@@ -174,18 +184,21 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'What did you eat?',
                     style: TextStyle(
-                      color: AppTheme.textDark,
+                      color: AppTheme.textDark(context),
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'Enter the food name and its calories to log it.',
-                    style: TextStyle(color: AppTheme.textMuted, fontSize: 14),
+                    style: TextStyle(
+                      color: AppTheme.textMuted(context),
+                      fontSize: 14,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   TextFormField(
@@ -194,6 +207,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     maxLength: 40,
                     textCapitalization: TextCapitalization.words,
                     textInputAction: TextInputAction.next,
+                    style: TextStyle(color: AppTheme.textDark(context)),
                     onFieldSubmitted: (_) => _calorieFocus.requestFocus(),
                     decoration: _decoration(
                       label: 'Food Name',
@@ -210,6 +224,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     textInputAction: TextInputAction.done,
+                    style: TextStyle(color: AppTheme.textDark(context)),
                     onFieldSubmitted: (_) => _submit(),
                     decoration: _decoration(
                       label: 'Calorie Amount (kcal)',
@@ -219,10 +234,10 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
+                  Text(
                     'Quick add',
                     style: TextStyle(
-                      color: AppTheme.textDark,
+                      color: AppTheme.textDark(context),
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
@@ -234,9 +249,20 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     children: [
                       for (final _QuickPick pick in _quickPicks)
                         ActionChip(
-                          label: Text('${pick.name} · ${pick.calories}'),
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(color: AppTheme.border),
+                          label: Text(
+                            '${pick.name} · ${pick.calories}',
+                            style: TextStyle(
+                              color: AppTheme.textDark(context),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          backgroundColor: isDark
+                              ? AppTheme.darkCard
+                              : Colors.white,
+                          side: BorderSide(
+                            color: AppTheme.borderColor(context),
+                          ),
                           onPressed: () => _applyQuickPick(pick),
                         ),
                     ],

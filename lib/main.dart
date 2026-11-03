@@ -5,6 +5,15 @@ import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 import 'utils/constants.dart';
 
+/// Global theme notifier allowing users to toggle between System, Light, and Dark modes.
+final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier<ThemeMode>(
+  ThemeMode.system,
+);
+
+/// Global theme notifier allowing users to toggle between System, Light, and Dark modes.
+final ValueNotifier<ThemeMode> themeModeNotifier =
+    ValueNotifier<ThemeMode>(ThemeMode.system);
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(<DeviceOrientation>[
@@ -18,11 +27,18 @@ class CalorieTrackerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: kAppName,
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      home: const SplashScreen(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeModeNotifier,
+      builder: (BuildContext context, ThemeMode mode, _) {
+        return MaterialApp(
+          title: kAppName,
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: mode,
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }
