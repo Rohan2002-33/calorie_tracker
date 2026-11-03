@@ -6,11 +6,6 @@ import 'theme/app_theme.dart';
 import 'utils/constants.dart';
 
 /// Global theme notifier allowing users to toggle between System, Light, and Dark modes.
-final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier<ThemeMode>(
-  ThemeMode.system,
-);
-
-/// Global theme notifier allowing users to toggle between System, Light, and Dark modes.
 final ValueNotifier<ThemeMode> themeModeNotifier =
     ValueNotifier<ThemeMode>(ThemeMode.system);
 

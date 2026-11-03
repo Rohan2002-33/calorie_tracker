@@ -36,49 +36,6 @@ class AppTheme {
   // Adaptive Color Helpers
   static Color textDark(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-      ? darkTextPrimary
-      : lightTextDark;
-
-  static Color textMuted(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-      ? darkTextMuted
-      : lightTextMuted;
-
-  static Color borderColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-      ? darkBorder
-      : lightBorder;
-
-  static Color cardBg(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? darkCard : lightCard;
-
-  /// Adaptive rounded outline used by cards.
-  static RoundedRectangleBorder cardShape([BuildContext? context]) {
-    final Color borderC = context != null ? borderColor(context) : lightBorder;
-    return RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
-      side: BorderSide(color: borderC),
-    );
-  }
-
-  /// Light Theme
-  // Dark Palette
-  static const Color darkBackground = Color(0xFF111714);
-  static const Color darkCard = Color(0xFF1B231F);
-  static const Color darkTextPrimary = Color(0xFFEDF5F1);
-  static const Color darkTextMuted = Color(0xFF90A199);
-  static const Color darkBorder = Color(0xFF28362F);
-  static const Color darkInputFill = Color(0xFF161E1A);
-
-  // Static constants preserved for backward compatibility
-  static const Color background = lightBackground;
-  static const Color textDarkStatic = lightTextDark;
-  static const Color textMutedStatic = lightTextMuted;
-  static const Color border = lightBorder;
-
-  // Adaptive Color Helpers
-  static Color textDark(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
           ? darkTextPrimary
           : lightTextDark;
 
@@ -93,15 +50,11 @@ class AppTheme {
           : lightBorder;
 
   static Color cardBg(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-          ? darkCard
-          : lightCard;
+      Theme.of(context).brightness == Brightness.dark ? darkCard : lightCard;
 
   /// Adaptive rounded outline used by cards.
   static RoundedRectangleBorder cardShape([BuildContext? context]) {
-    final Color borderC = context != null
-        ? borderColor(context)
-        : lightBorder;
+    final Color borderC = context != null ? borderColor(context) : lightBorder;
     return RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
       side: BorderSide(color: borderC),
@@ -141,51 +94,6 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-
-  /// Dark Theme
-  static ThemeData get dark {
-    final ColorScheme scheme =
-        ColorScheme.fromSeed(
-          seedColor: primary,
-          brightness: Brightness.dark,
-        ).copyWith(
-          primary: primaryLight,
-          surface: darkCard,
-          onSurface: darkTextPrimary,
-        );
-
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: scheme,
-      scaffoldBackgroundColor: darkBackground,
-      cardColor: darkCard,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: darkBackground,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: false,
-        titleTextStyle: TextStyle(
-          color: darkTextPrimary,
-          fontSize: 22,
-          fontWeight: FontWeight.w700,
-        ),
-        iconTheme: IconThemeData(color: darkTextPrimary),
-      ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: primary,
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      ),
-      snackBarTheme: SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332C),
-        contentTextStyle: const TextStyle(color: darkTextPrimary),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
