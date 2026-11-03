@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/food_item.dart';
+import '../services/food_image_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 
@@ -34,6 +35,16 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _calorieController = TextEditingController();
   final FocusNode _calorieFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -80,19 +91,45 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    final String name = _nameController.text.trim();
     final FoodItem item = FoodItem(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
-      name: _nameController.text.trim(),
+      name: name,
       calories: int.parse(_calorieController.text.trim()),
       addedAt: DateTime.now(),
+      imageUrl: FoodImageService.getFoodImageUrl(name),
     );
     Navigator.of(context).pop(item);
+  }
+
+  Widget _buildFoodPrefix() {
+    final String name = _nameController.text.trim();
+    if (name.isEmpty) {
+      return const Icon(Icons.restaurant_rounded, color: AppTheme.textMuted);
+    }
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Image.network(
+            FoodImageService.getFoodImageUrl(name),
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) =>
+                const Icon(Icons.restaurant_rounded, color: AppTheme.primary),
+          ),
+        ),
+      ),
+    );
   }
 
   InputDecoration _decoration({
     required String label,
     required String hint,
-    required IconData icon,
+    Widget? prefixIcon,
+    IconData? fallbackIcon,
     String? suffix,
   }) {
     OutlineInputBorder border(Color color, [double width = 1]) {
@@ -105,7 +142,11 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hint,
-      prefixIcon: Icon(icon, color: AppTheme.textMuted),
+      prefixIcon:
+          prefixIcon ??
+          (fallbackIcon != null
+              ? Icon(fallbackIcon, color: AppTheme.textMuted)
+              : null),
       suffixText: suffix,
       counterText: '',
       filled: true,
@@ -157,7 +198,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     decoration: _decoration(
                       label: 'Food Name',
                       hint: 'e.g. Grilled chicken',
-                      icon: Icons.restaurant_rounded,
+                      prefixIcon: _buildFoodPrefix(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -173,7 +214,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     decoration: _decoration(
                       label: 'Calorie Amount (kcal)',
                       hint: 'e.g. 350',
-                      icon: Icons.local_fire_department_rounded,
+                      fallbackIcon: Icons.local_fire_department_rounded,
                       suffix: 'kcal',
                     ),
                   ),

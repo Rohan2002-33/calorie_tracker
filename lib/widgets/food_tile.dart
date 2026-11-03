@@ -4,12 +4,57 @@ import '../models/food_item.dart';
 import '../theme/app_theme.dart';
 import '../utils/date_formatter.dart';
 
-/// One food entry: name, calories and a delete button.
+/// One food entry: real food photo, name, calories and a delete button.
 class FoodTile extends StatelessWidget {
   const FoodTile({super.key, required this.item, required this.onDelete});
 
   final FoodItem item;
   final VoidCallback onDelete;
+
+  Widget _buildImageAvatar() {
+    final String initial = item.name.isNotEmpty
+        ? item.name.substring(0, 1).toUpperCase()
+        : '?';
+
+    Widget fallback() {
+      return Container(
+        width: 46,
+        height: 46,
+        decoration: BoxDecoration(
+          color: AppTheme.primary.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          initial,
+          style: const TextStyle(
+            color: AppTheme.primary,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      );
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: SizedBox(
+        width: 46,
+        height: 46,
+        child: Image.network(
+          item.effectiveImageUrl,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return fallback();
+          },
+          errorBuilder: (context, error, stackTrace) => fallback(),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +64,10 @@ class FoodTile extends StatelessWidget {
       color: Colors.white,
       shape: AppTheme.cardShape,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
+        padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 22,
-              backgroundColor: AppTheme.primary.withValues(alpha: 0.12),
-              child: Text(
-                item.name.substring(0, 1).toUpperCase(),
-                style: const TextStyle(
-                  color: AppTheme.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
+            _buildImageAvatar(),
             const SizedBox(width: 14),
             Expanded(
               child: Column(

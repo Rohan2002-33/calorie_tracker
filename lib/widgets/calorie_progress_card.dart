@@ -17,8 +17,9 @@ class CalorieProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progress =
-        goal == 0 ? 0.0 : (total / goal).clamp(0.0, 1.0).toDouble();
+    final double progress = goal == 0
+        ? 0.0
+        : (total / goal).clamp(0.0, 1.0).toDouble();
     final bool exceeded = total > goal;
 
     final String status;

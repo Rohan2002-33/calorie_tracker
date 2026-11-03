@@ -21,9 +21,8 @@ class AppTheme {
   );
 
   static ThemeData get light {
-    final ColorScheme scheme = ColorScheme.fromSeed(
-      seedColor: primary,
-    ).copyWith(primary: primary, surface: Colors.white);
+    final ColorScheme scheme = ColorScheme.fromSeed(seedColor: primary)
+        .copyWith(primary: primary, surface: Colors.white);
 
     return ThemeData(
       useMaterial3: true,
